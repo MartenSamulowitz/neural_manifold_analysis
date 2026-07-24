@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (never commit — large / possibly unpublished collaborator data)
+*.mat
+*.pkl
+*.npy
+*.npz
+raw_data/
+preprocessed_data/
+results/
+
+# OS / editor
+.DS_Store
+.vscode/
