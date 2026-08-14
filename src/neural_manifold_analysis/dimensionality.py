@@ -28,13 +28,20 @@ __all__ = [
 def threshold_dim(
     data: np.ndarray,
     threshold: float = 0.9,
-):
-    """Performs PCA on the data and returns the number of components needed to
-    reach a specified variance threshold.
+) -> int:
+    """Estimate dimensionality as the number of PCA components needed to reach a
+    cumulative variance threshold.
 
-    compute_pca() mean-centers each row before fitting, so no explicit centering
+    ``compute_pca`` mean-centers each row before fitting, so no explicit centering
     is done here. No variance normalisation is applied — the input is expected to
     be globally z-scored upstream.
+
+    Args:
+        data: Array of shape (n_features, n_samples).
+        threshold: Cumulative explained-variance ratio to reach (default 0.9).
+
+    Returns:
+        Number of components required to explain at least ``threshold`` variance.
     """
     try:
         pca = compute_pca(data, num_components=min(data.shape))
@@ -59,12 +66,18 @@ def threshold_dim(
 # ==============================================================================
 
 def participation_ratio(data: np.ndarray) -> float:
-    """Calculates the Participation Ratio (PR) of the data, a measure of effective dimensionality.
+    """Calculate the Participation Ratio (PR), an effective-dimensionality measure.
 
-    PR is defined as (sum of eigenvalues)^2 / sum of squared eigenvalues.
-    compute_pca() mean-centers each row before fitting, so no explicit centering
+    PR is defined as ``(sum of eigenvalues)^2 / sum of squared eigenvalues``.
+    ``compute_pca`` mean-centers each row before fitting, so no explicit centering
     is done here. No variance normalisation is applied — the input is expected to
     be globally z-scored upstream.
+
+    Args:
+        data: Array of shape (n_features, n_samples).
+
+    Returns:
+        Participation ratio of the data covariance.
     """
     try:
         pca = compute_pca(data, num_components=min(data.shape))

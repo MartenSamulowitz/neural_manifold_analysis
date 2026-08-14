@@ -195,6 +195,9 @@ class ArtifactStore:
         Args:
             name: If provided, only clear this specific artifact from cache.
                   If None, clear the entire cache.
+
+        Returns:
+            None.
         """
         if name is not None:
             self._cache.pop(name, None)

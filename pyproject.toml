@@ -4,8 +4,8 @@ version = "0.1.0"
 description = "Neural population geometry & manifold-analysis primitives (normalization, PCA, dimensionality, pairwise metrics, Procrustes, sampling, IO, plotting)."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
-authors = [{ name = "Marten Samulowitz" }]
+license = { file = "LICENSE" }
+authors = [{ name = "Marten Samulowitz"}]
 keywords = ["neuroscience", "dimensionality", "PCA", "manifold", "procrustes", "neural-data"]
 classifiers = [
     "Development Status :: 3 - Alpha",

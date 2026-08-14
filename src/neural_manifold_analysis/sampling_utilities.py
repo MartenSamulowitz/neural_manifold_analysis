@@ -123,22 +123,18 @@ def resample_bins(values: np.ndarray, n_target: int, intensive: bool = True) -> 
     bin edges, apportioning each source bin exactly (the only assumption is uniform
     density within a source bin).
 
-    Parameters
-    ----------
-    values
-        ``(..., n_source)`` array; the last axis holds the bins to resample
-        (e.g. spatial or temporal bins of a rate or count signal).
-    n_target
-        Desired number of bins after re-binning.
-    intensive
-        If ``True`` (default) values are treated as an intensive density (e.g. a
-        rate) and rescaled by ``n_target / n_source`` so magnitude is
-        resolution-invariant. Set ``False`` for an extensive quantity (e.g. raw
-        counts), where total mass is conserved without rescaling.
+    Args:
+        values: ``(..., n_source)`` array; the last axis holds the bins to resample
+            (e.g. spatial or temporal bins of a rate or count signal).
+        n_target: Desired number of bins after re-binning.
+        intensive: If ``True`` (default), values are treated as an intensive
+            density (e.g. a rate) and rescaled by ``n_target / n_source`` so that
+            magnitude is resolution-invariant. Set ``False`` for an extensive
+            quantity (e.g. raw counts), where total mass is conserved without
+            rescaling.
 
-    Returns
-    -------
-    ``(..., n_target)`` re-binned array.
+    Returns:
+        ``(..., n_target)`` re-binned array.
     """
     values = np.asarray(values, dtype=float)
     n_source = values.shape[-1]

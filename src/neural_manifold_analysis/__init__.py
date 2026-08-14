@@ -20,10 +20,10 @@ re-exports them so everything is reachable from the top-level ``nma`` namespace.
 from .io import *
 from .normalizations import *
 from .pairwise_metrics import *
-from .dimensionality import *
-from .pca import *
-from .plotting import *
-from .aggregation_utilities import *
 from .sampling_utilities import *
+from .pca import *
+from .dimensionality import *
+from .aggregation_utilities import *
+from .plotting import *
 
 __version__ = "0.1.0"
