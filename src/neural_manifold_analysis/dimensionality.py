@@ -9,14 +9,12 @@ from scipy import stats
 
 from .normalizations import center
 from .pca import compute_pca
-from .sampling_utilities import subsample
 
 __all__ = [
     'threshold_dim',
     'participation_ratio',
     'evaluate_eigenspectrum_against_null',
     'parallel_analysis',
-    'estimate_dimensionality_metrics',
     'parallel_analysis_fast',
 ]
 
@@ -348,60 +346,4 @@ def parallel_analysis_fast(
     if return_spectrum:
         return dim, max_shuffles, real_eigenvalues, null_mean, null_std
     return dim, max_shuffles
-
-
-# ==============================================================================
-# Estimating all 3 dimensionality metrics together, looped over subsampling fractions.
-# ==============================================================================
-
-def estimate_dimensionality_metrics(
-    data: np.ndarray,
-    fractions: list[float],
-    fraction_overlap: int = 3,
-    variance_threshold: float = 0.9,
-    subsampling_axis: int = 0,
-    rng: np.random.Generator | None = None,
-) -> dict:
-    """Estimate dimensionality metrics (Participation Ratio, Thresholding, Parallel Analysis) across subsampling fractions.
-
-    Args:
-        data: Array of shape (n_features, n_samples).
-        fractions: List of subsampling fractions (e.g., [0.1, 0.25, 0.5, 0.75, 1.0]).
-        fraction_overlap: Average number of times each entry appears across all
-            draws of a single fraction. Sets the number of repeats per fraction to
-            ceil(fraction_overlap / fraction), so smaller fractions are drawn more
-            often. Keeps coverage roughly constant while bounding total draws.
-        variance_threshold: Variance threshold for the thresholding method.
-        subsampling_axis: Axis to subsample along (0 = features/rows, 1 = samples/columns).
-        rng: NumPy random Generator instance. If None, a new default_rng() is created.
-
-    Returns:
-        Dictionary with keys:
-        - 'participation_ratio': dict mapping fraction → list of PR values
-        - 'threshold_dim': dict mapping fraction → list of thresholding values
-        - 'parallel_analysis_dim': dict mapping fraction → list of PA values
-    """
-    
-    if rng is None:
-        rng = np.random.default_rng()
-
-    results = {
-        'participation_ratio': {fraction: [] for fraction in fractions},
-        'threshold_dim': {fraction: [] for fraction in fractions},
-        'parallel_analysis_dim': {fraction: [] for fraction in fractions}
-    }
-
-    for fraction in fractions:
-        n_repeats = 1 if fraction == 1 else max(1, int(np.ceil(fraction_overlap / fraction)))
-        print(f"Processing fraction {fraction}", end='', flush=True)
-        print(f", Repeats: {n_repeats}")
-
-        for _ in range(n_repeats):
-            subset = subsample(data, fraction=fraction, axis=subsampling_axis, rng=rng)
-
-            results['participation_ratio'][fraction].append(participation_ratio(subset))
-            results['threshold_dim'][fraction].append(threshold_dim(subset, threshold=variance_threshold))
-            results['parallel_analysis_dim'][fraction].append(parallel_analysis_fast(subset)[0])
-
-    return results
 
